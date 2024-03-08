@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+   New Perspectives on XML
+   Tutorial 3
+   Case Problem 4
+
+   Map Finds For You schema
+   Author: Nihitha Reddy Seelam
+   Date: 03/08/2024
+
+   Filename:         orders.xsd
+   Supporting Files: orders.xml
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Define custom data types -->
+  
+  <!-- Custom email address type -->
+  <xs:simpleType name="CustomEmailAddType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\w{1,9}@example.net"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Custom customer ID type -->
+  <xs:simpleType name="CustomCustType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="cust\d{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- Custom item number type -->
+  <xs:simpleType name="CustomItemNumberType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="WM\d{3}\w{1,2}|H\d{3}\w{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Custom sale item type -->
+  <xs:simpleType name="CustomSaleItemType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="N|Y"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- Custom order ID type -->
+  <xs:simpleType name="CustomOrderIDType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="or\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Custom order by type -->
+  <xs:simpleType name="CustomOrderByType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="cust\d{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Custom title type -->
+  <xs:simpleType name="CustomTitleType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="Mr."/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Define elements -->
+  
+  <!-- Element for item price -->
+  <xs:element name="itemPrice">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute ref="saleItem"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for item quantity -->
+  <xs:element name="itemQty">
+    <xs:simpleType>
+      <xs:restriction base="xs:integer">
+        <xs:minInclusive value="0"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <!-- Element for item -->
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="itemPrice"/>
+        <xs:element ref="itemQty"/>
+      </xs:sequence>
+      <xs:attribute ref="itemNumber"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for items -->
+  <xs:element name="items">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="item" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for order date -->
+  <xs:element name="orderDate" type="xs:date"/>
+
+  <!-- Element for order -->
+  <xs:element name="order">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="orderDate"/>
+        <xs:element ref="items"/>
+      </xs:sequence>
+      <xs:attribute ref="orderID"/>
+      <xs:attribute ref="orderBy"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for orders -->
+  <xs:element name="orders">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="order" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for email -->
+  <xs:element name="email" type="CustomEmailAddType"/>
+  
+  <!-- Element for phone -->
+  <xs:element name="phone" type="xs:string"/>
+  
+  <!-- Element for address -->
+  <xs:element name="address" type="xs:string"/>
+
+  <!-- Element for name -->
+  <xs:element name="name">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute ref="title"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for customer -->
+  <xs:element name="customer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="address"/>
+        <xs:element ref="phone"/>
+        <xs:element ref="email" minOccurs="0"/>
+        <xs:element ref="orders"/>
+      </xs:sequence>
+      <xs:attribute ref="custID"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Element for customers -->
+  <xs:element name="customers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="customer" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Define attributes -->
+  
+  <!-- Attribute for item number -->
+  <xs:attribute name="itemNumber" type="CustomItemNumberType"/>
+  
+  <!-- Attribute for sale item -->
+  <xs:attribute name="saleItem" type="CustomSaleItemType"/>
+  
+  <!-- Attribute for title -->
+  <xs:attribute name="title" type="CustomTitleType"/>
+  
+  <!-- Attribute for customer ID -->
+  <xs:attribute name="custID" type="CustomCustType"/>
+  
+  <!-- Attribute for order ID -->
+  <xs:attribute name="orderID" type="CustomOrderIDType"/>
+  
+  <!-- Attribute for order by -->
+  <xs:attribute name="orderBy" type="CustomOrderByType"/>
+
+</xs:schema>
